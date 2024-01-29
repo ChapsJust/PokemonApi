@@ -2,7 +2,7 @@ const mysql = require("mysql");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const pool = mysql.createPool({
+const db = mysql.createPool({
     connectionLimit: process.env.MYSQL_CONNECTION_LIMIT,
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
@@ -10,4 +10,4 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 });
 
-module.exports = pool;
+module.exports = db;
