@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 dotenv.config();
 const port = process.env.PORT;
-const routes = require("./.src/routes/pokemon");
+const routes = require("./src/routes/pokemon");
 
 app.use(morgan("dev"));
 app.use(express.json());
