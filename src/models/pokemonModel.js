@@ -6,6 +6,7 @@ const getPokemonById = (id) => {
   return new Promise((resolve, reject) => {
     const query = `SELECT * FROM pokemon WHERE id = ?`;
     pool.query(query, [id], (error, results) => {
+      // Note : L'erreur ici est pour une erreur SQL, si le pokemon n'existe pas, ça va être considéré comme un succès mais tu auras un tableau vide
       if (error) {
         reject(error);
       } else if (results.length === 0) {
@@ -17,6 +18,8 @@ const getPokemonById = (id) => {
   });
 };
 
+// NOTE : La fonction getAllPokemons devrait seulement te retourner la liste de pokemons
+// Le traitement et le format de la réponse devrait être fait dans le controller
 const getAllPokemons = (page, type) => {
   return new Promise((resolve, reject) => {
     let query = 'SELECT * FROM pokemon';
@@ -56,6 +59,7 @@ const getAllPokemons = (page, type) => {
 const addPokemon = (newPokemon) => {
   return new Promise((resolve, reject) => {
     const query = 'INSERT INTO pokemon SET ?';
+    // NOTE : Si j'envois un objet avec des propriétés qui ne sont pas dans la table pokemon, ça va planter
     pool.query(query, newPokemon, (error, results) => {
       if (error) {
         reject(error);
@@ -69,11 +73,13 @@ const addPokemon = (newPokemon) => {
 
 const updatePokemon = (id, updatedPokemon) => {
   return new Promise((resolve, reject) => {
+    // NOTE : Si j'envois un objet avec des propriétés qui ne sont pas dans la table pokemon, ça va planter
     const query = 'UPDATE pokemon SET ? WHERE id = ?';
     pool.query(query, [updatedPokemon, id], (error, results) => {
       if (error) {
         reject(error);
       } else if (results.affectedRows === 0) {
+        // NOTE : Si le pokemon n'existe pas, ça va être considéré comme un succès mais tu auras un tableau vide
         reject({ status: 404, message: `Le pokemon id ${id} n'existe pas dans la base de données` });
       } else {
         resolve({ id, ...updatedPokemon });
@@ -89,6 +95,7 @@ const deletePokemon = (id) => {
       if (error) {
         reject(error);
       } else if (results.affectedRows === 0) {
+        // NOTE : Si le pokemon n'existe pas, ça va être considéré comme un succès mais tu auras un tableau vide
         reject({ status: 404, message: `Le pokemon id ${id} n'existe pas dans la base de données` });
       } else {
         resolve({ id, ...results });
